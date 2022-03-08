@@ -1,0 +1,21 @@
+main.tf
+
+provider "aws" {
+  region     = "us-west-2"
+  access_key = "AKIARC5WYXMBFOIGZMLR"
+  secret_key = "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"
+}
+
+resource "aws_instance" "myec2" {
+   ami = "ami-082b5a644766e0e6f"
+   instance_type = "t2.micro"
+}
+resource "aws_iam_user" "lb" {
+name = "loadbalancer"
+}
+
+command:
+terraform taint aws_instance.myec2
+terraform taint aws_iam_user.lb
+
+check the status in terraform.tfstate file: status:tainted
