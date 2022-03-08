@@ -1,0 +1,48 @@
+main.tf
+
+provider "aws" {
+  region     = "us-west-2"
+  access_key = "select"
+  secret_key = "select"
+}
+variable "sg-port" {
+  type    = list(number)
+  default = [8200, 8201, 8300, 9200, 9500]
+}
+resource "aws_security_group" "dynamicsg" {
+  name = "dynamic-sg"
+  dynamic "ingress" {
+    for_each = var.sg-port
+    content {
+      to_port     = ingress.value
+      from_port   = ingress.value
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  }
+}
+
+Using Iterator : main.tf
+
+provider "aws" {
+  region     = "us-west-2"
+  access_key = "AKIARC5WYXMBB7VSXR2P"
+  secret_key = "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"
+}
+variable "sg-port" {
+  type    = list(number)
+  default = [8200, 8201, 8300, 9200, 9500]
+}
+resource "aws_security_group" "dynamicsg" {
+  name = "dynamic-sg"
+  dynamic "ingress" {
+    for_each = var.sg-port
+    iterator = port
+    content {
+      to_port     = port.value
+      from_port   = port.value
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  }
+}
