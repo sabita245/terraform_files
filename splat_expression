@@ -1,0 +1,25 @@
+main.tf
+
+provider "aws" {
+  region     = "us-west-2"
+  access_key = "AKIARC5WYXMBPMIPAX2P"
+  secret_key = "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"
+}
+
+resource "aws_instance" "myec2" {
+   ami = "ami-082b5a644766e0e6f"
+   instance_type = "t2.micro"
+}
+resource "aws_iam_user" "lb" {
+name = "loadbalancer.${count.index}"
+count = 3
+}
+output "name" {
+value = aws_iam_user.lb[*].name
+}
+output "arn" {
+value = aws_iam_user.lb[*].arn
+}
+
+
+command: terraform apply
